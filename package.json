@@ -1,0 +1,22 @@
+{
+  "name": "final_project",
+  "version": "1.0.0",
+  "description": "Backend E-commerce Final Project",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alonpoh92/CoderHouse_Backend_Proyecto_Final.git"
+  },
+  "author": "Alonso Aponte Hung",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alonpoh92/CoderHouse_Backend_Proyecto_Final/issues"
+  },
+  "homepage": "https://github.com/alonpoh92/CoderHouse_Backend_Proyecto_Final#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

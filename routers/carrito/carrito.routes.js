@@ -1,0 +1,117 @@
+const express = require('express');
+const {Container} = require('../../classes/Container');
+const {Cart} = require('../../classes/Cart');
+const e = require('express');
+
+const router = express.Router();
+
+const cart = new Container('cart.txt');
+const productsList = new Container('products.txt');
+
+router.post('/', async (req, res) => {
+    const { products } = req.body;
+    if(products){
+        const productsIds = products.substring(1, products.length - 1).split(',');
+        let newProducts = [];
+        for(let x=0; x<productsIds.length; x++){
+            const data = await productsList.getById(productsIds[x].trim());
+            if(!data.error){
+                newProducts.push(data.data);
+            }
+        }
+        const newCart = new Cart(undefined, newProducts);
+        const data = await cart.save(newCart);
+        if(!data.error){
+            res.status(200).json({data: newCart, error: null});
+        }else{
+            res.status(400).json(data);
+        }
+    }else{
+        res.status(400).json({data: null, error: 'Incomplete or invalid information'});
+    }
+});
+
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+    let data = await cart.getById(id);
+    if(!data.error){
+        data = await cart.deleteById(id);
+        if(!data.error){
+            res.status(200).json(data);
+        }else{
+            res.status(400).json(data);
+        }
+    }else{
+        res.status(400).json(data);
+    }
+});
+
+router.get('/:id/products', async (req, res) => {
+    const { id } = req.params;
+    const data = await cart.getById(id);
+    if(!data.error){
+        data.data = data.data.products;
+        res.status(200).json(data);
+    }else{
+        res.status(400).json(data);
+    }
+});
+
+router.post('/:id/products', async (req, res) => {
+    const { id } = req.params;
+    const { product } = req.body;
+    if(product){
+        const oldData = await cart.getById(id);
+        if(!oldData.error){
+            let products = oldData.data.products;
+            const data = await productsList.getById(product);
+            if(!data.error){
+                products.push(data.data);
+                let newData = oldData.data;
+                newData.products = products;
+                const removeData = await cart.deleteById(id);
+                if(!removeData.error){
+                    const saveData = await cart.save(newData);
+                    if(!saveData.error){
+                        res.status(200).json({data: newData, error: null});
+                    }else{
+                        res.status(400).json(saveData);
+                    }
+                }else{
+                    res.status(400).json(removeData);
+                }
+            }else{
+                res.status(400).json(data);
+            }
+        }else{
+            res.status(400).json(oldData);
+        }
+    }else{
+        res.status(400).json({data: null, error: 'Incomplete or invalid information'});
+    }
+});
+
+router.delete('/:id/products/:id_prod', async (req, res) => {
+    const { id, id_prod } = req.params;
+    const oldData = await cart.getById(id);
+    if(!oldData.error){
+        const products = oldData.data.products.filter(product => product.id != id_prod);
+        let newData = oldData.data;
+        newData.products = products;
+        const removeData = await cart.deleteById(id);
+        if(!removeData.error){
+            const saveData = await cart.save(newData);
+            if(!saveData.error){
+                res.status(200).json({data: newData, error: null});
+            }else{
+                res.status(400).json(saveData);
+            }
+        }else{
+            res.status(400).json(removeData);
+        }
+    }else{
+        res.status(400).json(oldData);
+    }
+});
+
+module.exports = router;
