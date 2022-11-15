@@ -3,7 +3,7 @@ const fs = require('fs');
 class FileContainer{
     constructor(resource){
         this.file = resource;
-        this.folder = './data/';
+        this.folder = '../../data/';
         this.path = `${this.folder}${this.file}`;
     }
 

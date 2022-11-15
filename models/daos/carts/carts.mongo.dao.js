@@ -6,3 +6,5 @@ class CartsMongoDao extends MongoContainer{
         super(cartsCollection, cartsSchema);
     }
 }
+
+module.exports = CartsMongoDao;

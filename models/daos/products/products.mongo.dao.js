@@ -6,3 +6,5 @@ class ProductsMongoDao extends MongoContainer{
         super(productsCollection, productsSchema);
     }
 }
+
+module.exports = ProductsMongoDao;
