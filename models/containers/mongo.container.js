@@ -1,0 +1,53 @@
+const mongoose = require('mongoose');
+const dbConfig = require('../../db/db.config');
+
+class MongoContainer{
+    constructor(collection, schema){
+        this.model = mongoose.model(collection, schema);
+    }
+
+    static async connect(){
+        await mongoose.connect(dbConfig.mongodb.uri);
+    }
+
+    static async disconnect(){
+        await mongoose.disconnect();
+    }
+
+    async getAll(filter = {}){
+        const documents = await this.model.find(filter, {__v: 0, _id: 0}).lean();
+        return documents;
+    }
+
+    async getById(id){
+        const document = await this.model.findOne({id}, {__v: 0, _id: 0});
+        if(!document){
+            throw new Error(`id ${id} does not exist in our records`);
+        }
+        return document;
+    }
+
+    async save(item){
+        const data = this.getAll();
+        if(!item.id){
+            let maxId = 0;
+            if(data.length > 0){
+                const ids = data.map(product => product.id);
+                maxId = Math.max(...ids);
+            }
+            item.id = maxId + 1;
+        }
+        const newDocument = new this.model(item);
+        return await newDocument.save();
+    }
+
+    async deleteById(id){
+        return await this.model.deleteOne({id});
+    }
+
+    async deleteAll(){
+        return await this.model.deleteMany({});
+    }
+}
+
+module.exports = MongoContainer;

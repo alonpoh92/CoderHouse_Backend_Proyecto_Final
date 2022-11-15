@@ -1,10 +1,10 @@
 const express = require('express');
-const {Container} = require('../../classes/Container');
-const {Product} = require('../../classes/Product');
+const {FileContainer} = require('../../models/containers/file.container');
+const {Product} = require('../../models/classes/Product');
 
 const router = express.Router();
 
-const products = new Container('products.txt');
+const products = new FileContainer('products.txt');
 
 function noAdminRouteError(req){
     return {error: -1, description: `path '${req.originalUrl}' method '${req.method}' not authorized`}
