@@ -7,6 +7,10 @@ class FileContainer{
         this.path = `${this.folder}${this.file}`;
     }
 
+    static async connect(){
+        return;
+    }
+
     async read(){
         const res = {};
         try{

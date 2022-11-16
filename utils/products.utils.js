@@ -9,7 +9,7 @@ module.exports = {
         description: { type : String },
         code: { type : String },
         photo: { type : String },
-        price: { type : Decimal128 },
+        price: { type : Number },
         stock: { type: Number}
     })
 }

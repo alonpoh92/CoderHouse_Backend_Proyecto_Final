@@ -11,7 +11,7 @@ module.exports = {
         carts: 'data/carts.json'
     },
     mongodb: {
-        uri: `mongodb+srv://${envConfig.DB_USER}:${envConfig.DB_PASSWORD}@coderhousebackend.mcdak1d.mongodb.net/?retryWrites=true&w=majority`
+        uri: `mongodb+srv://${envConfig.DB_USER}:${envConfig.DB_PASSWORD}@coderhousebackend.mcdak1d.mongodb.net/CoderHouseBackend?retryWrites=true&w=majority`
     },
     firebase: {
         credentials: firebaseConfig

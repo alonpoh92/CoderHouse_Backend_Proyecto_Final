@@ -1,12 +1,12 @@
 const express = require('express');
-const {FileContainer} = require('../../models/containers/file.container');
-const {Cart} = require('../../models/classes/Cart');
+const {CartsController} = require('../../controllers/carts.controller');
+const {ProductsController} = require('../../controllers/products.controller');
 const e = require('express');
 
 const router = express.Router();
 
-const cart = new FileContainer('cart.txt');
-const productsList = new FileContainer('products.txt');
+const cart = new CartsController();
+const productsList = new ProductsController();
 
 router.post('/', async (req, res) => {
     const { products } = req.body;

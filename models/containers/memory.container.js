@@ -4,6 +4,10 @@ class MemoryContainer{
         this.resource = resource;
     }
 
+    static async connect(){
+        return;
+    }
+
     getAll(){
         return this.items;
     }
