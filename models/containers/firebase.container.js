@@ -3,20 +3,27 @@ const { getFirestore } = require('firebase-admin/firestore');
 const dbConfig = require('../../DB/db.config');
 
 class FirebaseContainer{
-    constructor(collection){
-        const db =  getFirestore();
-        this.query = db.collection(collection);
+    constructor(collection){   
+        this.collection = collection;   
+        this.query;
     }
-
-    static async connect(){
+    
+    static async connect(collection){
         admin.initializeApp({
             credential: admin.credential.cert(dbConfig.firebase.credentials)
         });
+        console.log('aqui');
+        const db = getFirestore();
+        console.log('aqui1');
+        this.query = db.collection(collection);
+        console.log('aqui2');
     }
 
     async getAll(){
+        console.log(this.query)
         const docRef = await this.query.get();
         const documents = docRef.docs;
+        console.log(documents);
         return documents.map(document => {
             return{
                 id: document.id,

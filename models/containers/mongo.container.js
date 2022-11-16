@@ -6,7 +6,7 @@ class MongoContainer{
         this.model = mongoose.model(collection, schema);
     }
 
-    static async connect(){
+    static async connect(collection){
         await mongoose.connect(dbConfig.mongodb.uri);
     }
 
