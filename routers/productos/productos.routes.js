@@ -23,7 +23,7 @@ function isAdmin(admin){
 }
 
 router.get('/', async (req, res) => {
-    const data = await products.getAll();
+    const data = await products.getAllProducts();
     if(!data.error){
         res.status(200).json(data);
     }else{
@@ -33,7 +33,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
-    const data = await products.getById(id);
+    const data = await products.getProductById(id);
     if(!data.error){
         res.status(200).json(data);
     }else{
@@ -46,7 +46,7 @@ router.post('/', async (req, res) => {
     if(isAdmin(administrador)){
         if(name.trim() && description.trim() && code.trim() && photo.trim() && Number(price.trim()) && Number(stock.trim())){
             const newProduct = new Product(undefined, name.trim(), description.trim(), code.trim(), photo.trim(), Number(price.trim()), Number(stock.trim()));
-            const data = await products.save(newProduct);
+            const data = await products.addNewProduct(newProduct);
             if(!data.error){
                 res.status(200).json({data: newProduct, error: null});
             }else{
@@ -66,11 +66,11 @@ router.put('/:id', async (req, res) => {
     body.price = Number(body.price);
     body.stock = Number(body.stock);
     if(isAdmin(body.administrador)){
-        let data = await products.getById(id);
+        let data = await products.getProductById(id);
         if(!data.error){
             if(body.name || body.description || body.code || body.photo || body.price || body.stock){
                 const product = data.data;
-                let updatedProduct = {};
+                const updatedProduct = {};
                 for(let key of Object.keys(product)){
                     if(body[key]){
                         updatedProduct[key] = body[key];
@@ -78,9 +78,9 @@ router.put('/:id', async (req, res) => {
                         updatedProduct[key] = product[key];
                     }
                 }
-                data = await products.deleteById(id);
+                data = await products.deleteProductById(id);
                 if(!data.error){
-                    data = await products.save(updatedProduct);
+                    data = await products.addNewProduct(updatedProduct);
                     if(!data.error){
                         data.data = updatedProduct;
                         res.status(200).json(data);
@@ -105,9 +105,9 @@ router.delete('/:id', async (req, res) => {
     const { id } = req.params;
     const body = req.body;
     if(isAdmin(body.administrador)){
-        let data = await products.getById(id);
+        let data = await products.getProductById(id);
         if(!data.error){
-            data = await products.deleteById(id);
+            data = await products.deleteProductById(id);
             if(!data.error){
                 res.status(200).json(data);
             }else{

@@ -35,7 +35,7 @@ class MemoryContainer{
     }
 
     deleteById(id){
-        const newItems = this.items.find(item => item.id != id);
+        const newItems = this.items.filter(item => item.id != id);
         this.items = newItems;
         return this.items;
     }

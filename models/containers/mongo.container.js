@@ -24,11 +24,11 @@ class MongoContainer{
         if(!document){
             throw new Error(`id ${id} does not exist in our records`);
         }
-        return document;
+        return document['_doc'];
     }
 
     async save(item){
-        const data = this.getAll();
+        const data = await this.getAll();
         if(!item.id){
             let maxId = 0;
             if(data.length > 0){
@@ -42,7 +42,14 @@ class MongoContainer{
     }
 
     async deleteById(id){
-        return await this.model.deleteOne({id});
+        let data;
+        try{
+            await this.model.deleteOne({id});
+            data = await this.getAll();
+        }catch(error){
+            throw new Error(error);
+        }
+        return data;
     }
 
     async deleteAll(){

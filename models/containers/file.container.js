@@ -3,7 +3,7 @@ const fs = require('fs');
 class FileContainer{
     constructor(resource){
         this.file = resource;
-        this.folder = '../../data/';
+        this.folder = './data/';
         this.path = `${this.folder}${this.file}`;
     }
 
@@ -71,8 +71,8 @@ class FileContainer{
             const result = await this.read();
             if(!result.error){
                 const data = JSON.parse(result.data);
-                const item = data.filter(product => product.id == id);
-                if(!item){
+                const item = data.find(product => product.id == id);
+                if(item.length < 1){
                     throw new Error(`id ${id} does not exist in our records`);
                 }
                 res = item;

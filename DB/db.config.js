@@ -7,8 +7,8 @@ module.exports = {
         carts: 'carts'
     },
     file: {
-        products: 'data/products.json',
-        carts: 'data/carts.json'
+        products: 'products.json',
+        carts: 'carts.json'
     },
     mongodb: {
         uri: `mongodb+srv://${envConfig.DB_USER}:${envConfig.DB_PASSWORD}@coderhousebackend.mcdak1d.mongodb.net/CoderHouseBackend?retryWrites=true&w=majority`
