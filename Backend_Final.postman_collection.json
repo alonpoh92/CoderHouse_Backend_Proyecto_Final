@@ -122,8 +122,7 @@
 					"name": "Delete Product",
 					"request": {
 						"method": "DELETE",
-						"header": [],
-						"url": null
+						"header": []
 					},
 					"response": []
 				}
@@ -179,8 +178,7 @@
 					"name": "Get Cart",
 					"request": {
 						"method": "GET",
-						"header": [],
-						"url": null
+						"header": []
 					},
 					"response": []
 				},
@@ -188,8 +186,7 @@
 					"name": "Add Product to Cart",
 					"request": {
 						"method": "POST",
-						"header": [],
-						"url": null
+						"header": []
 					},
 					"response": []
 				},
