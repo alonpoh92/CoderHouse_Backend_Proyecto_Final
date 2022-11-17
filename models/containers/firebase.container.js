@@ -13,6 +13,7 @@ class FirebaseContainer{
         }
         const db = getFirestore();
         this.query = db.collection(collection);
+        this.collection = collection;
     }
     
     static async connect(){
@@ -34,7 +35,7 @@ class FirebaseContainer{
         const docRef = await this.query.doc(id);
         const document = await docRef.get();
         if(!document.exists){
-            throw new Error(`id ${id} does not exist in our records`);
+            throw new Error(`${this.collection} with id ${id} does not exist in our records`);
         }
         return document.data();
     }

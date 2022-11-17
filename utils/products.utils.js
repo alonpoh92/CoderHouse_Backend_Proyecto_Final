@@ -3,7 +3,7 @@ const { Schema } = require("mongoose");
 module.exports = {
     productsCollection : 'products',
     productsSchema : new Schema({
-        id: { type: Number, unique: true },
+        id: { type: Number },
         timestamp : { type: Date },
         name: { type : String },
         description: { type : String },

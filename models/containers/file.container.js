@@ -1,8 +1,9 @@
 const fs = require('fs'); 
 
 class FileContainer{
-    constructor(resource){
-        this.file = resource;
+    constructor(collection){
+        this.file = `${collection}.json`;
+        this.collection = collection;
         this.folder = './data/';
         this.path = `${this.folder}${this.file}`;
     }
@@ -67,21 +68,18 @@ class FileContainer{
 
     async getById(id){
         let res;
-        try{
-            const result = await this.read();
-            if(!result.error){
-                const data = JSON.parse(result.data);
-                const item = data.find(product => product.id == id);
-                if(item.length < 1){
-                    throw new Error(`id ${id} does not exist in our records`);
-                }
-                res = item;
-            }else{
-                throw new Error(result.error);
+        const result = await this.read();
+        if(!result.error){
+            let data = JSON.parse(result.data);
+            let item = data.find(product => product.id == id);
+            if(!item){
+                throw new Error(`${this.collection} with id ${id} does not exist in our records`);
             }
-        }catch(error){
-            throw new Error(error);
+            res = item;
+        }else{
+            throw new Error(result.error);
         }
+        
         return res;
     }
 

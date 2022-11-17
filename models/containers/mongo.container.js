@@ -3,6 +3,7 @@ const dbConfig = require('../../db/db.config');
 
 class MongoContainer{
     constructor(collection, schema){
+        this.collection = collection;
         this.model = mongoose.model(collection, schema);
     }
 
@@ -22,7 +23,7 @@ class MongoContainer{
     async getById(id){
         const document = await this.model.findOne({id}, {__v: 0, _id: 0});
         if(!document){
-            throw new Error(`id ${id} does not exist in our records`);
+            throw new Error(`${this.collection} with id ${id} does not exist in our records`);
         }
         return document['_doc'];
     }
