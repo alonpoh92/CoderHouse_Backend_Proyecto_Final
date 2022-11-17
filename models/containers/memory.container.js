@@ -4,7 +4,7 @@ class MemoryContainer{
         this.resource = resource;
     }
 
-    static async connect(collection){
+    static async connect(){
         return;
     }
 

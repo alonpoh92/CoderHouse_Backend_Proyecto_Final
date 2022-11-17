@@ -23,7 +23,7 @@ app.all('*', function(req, res){
 });
 
 const server =  app.listen(PORT, () => {
-    dataSource.connect(envConfig.DATASOURCE).then(() => {
+    dataSource.connect().then(() => {
         console.log(`Connected to ${envConfig.DATASOURCE}`);
         console.log(`Server listening on port ${server.address().port}`);
     });

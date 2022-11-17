@@ -1,11 +1,11 @@
 const express = require('express');
 const {CartsController} = require('../../controllers/carts.controller');
 const {ProductsController} = require('../../controllers/products.controller');
-const e = require('express');
+const {Cart} = require('../../models/classes/Cart');
 
 const router = express.Router();
 
-const cart = new CartsController();
+const carts = new CartsController();
 const productsList = new ProductsController();
 
 router.post('/', async (req, res) => {
@@ -14,13 +14,13 @@ router.post('/', async (req, res) => {
         const productsIds = products.substring(1, products.length - 1).split(',');
         let newProducts = [];
         for(let x=0; x<productsIds.length; x++){
-            const data = await productsList.getById(productsIds[x].trim());
+            const data = await productsList.getProductById(productsIds[x].trim());
             if(!data.error){
                 newProducts.push(data.data);
             }
         }
         const newCart = new Cart(undefined, newProducts);
-        const data = await cart.save(newCart);
+        const data = await carts.addNewCart(newCart);
         if(!data.error){
             res.status(200).json({data: newCart, error: null});
         }else{
@@ -33,9 +33,9 @@ router.post('/', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
     const { id } = req.params;
-    let data = await cart.getById(id);
+    let data = await carts.getCartById(id);
     if(!data.error){
-        data = await cart.deleteById(id);
+        data = await carts.deleteCartById(id);
         if(!data.error){
             res.status(200).json(data);
         }else{
@@ -48,7 +48,7 @@ router.delete('/:id', async (req, res) => {
 
 router.get('/:id/products', async (req, res) => {
     const { id } = req.params;
-    const data = await cart.getById(id);
+    const data = await carts.getCartById(id);
     if(!data.error){
         data.data = data.data.products;
         res.status(200).json(data);
@@ -61,17 +61,17 @@ router.post('/:id/products', async (req, res) => {
     const { id } = req.params;
     const { product } = req.body;
     if(product){
-        const oldData = await cart.getById(id);
+        const oldData = await carts.getCartById(id);
         if(!oldData.error){
             let products = oldData.data.products;
-            const data = await productsList.getById(product);
+            const data = await productsList.getProductById(product);
             if(!data.error){
                 products.push(data.data);
                 let newData = oldData.data;
                 newData.products = products;
-                const removeData = await cart.deleteById(id);
+                const removeData = await carts.deleteCartById(id);
                 if(!removeData.error){
-                    const saveData = await cart.save(newData);
+                    const saveData = await carts.addNewCart(newData);
                     if(!saveData.error){
                         res.status(200).json({data: newData, error: null});
                     }else{
@@ -93,14 +93,14 @@ router.post('/:id/products', async (req, res) => {
 
 router.delete('/:id/products/:id_prod', async (req, res) => {
     const { id, id_prod } = req.params;
-    const oldData = await cart.getById(id);
+    const oldData = await carts.getCartById(id);
     if(!oldData.error){
         const products = oldData.data.products.filter(product => product.id != id_prod);
         let newData = oldData.data;
         newData.products = products;
-        const removeData = await cart.deleteById(id);
+        const removeData = await carts.deleteCartById(id);
         if(!removeData.error){
-            const saveData = await cart.save(newData);
+            const saveData = await carts.addNewCart(newData);
             if(!saveData.error){
                 res.status(200).json({data: newData, error: null});
             }else{

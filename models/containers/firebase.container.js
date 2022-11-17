@@ -4,26 +4,24 @@ const dbConfig = require('../../DB/db.config');
 
 class FirebaseContainer{
     constructor(collection){   
-        this.collection = collection;   
-        this.query;
+        try{
+            admin.initializeApp({
+                credential: admin.credential.cert(dbConfig.firebase.credentials)
+            });
+        }catch(error){
+            //console.log(error);
+        }
+        const db = getFirestore();
+        this.query = db.collection(collection);
     }
     
-    static async connect(collection){
-        admin.initializeApp({
-            credential: admin.credential.cert(dbConfig.firebase.credentials)
-        });
-        console.log('aqui');
-        const db = getFirestore();
-        console.log('aqui1');
-        this.query = db.collection(collection);
-        console.log('aqui2');
+    static async connect(){
+        return
     }
 
     async getAll(){
-        console.log(this.query)
         const docRef = await this.query.get();
         const documents = docRef.docs;
-        console.log(documents);
         return documents.map(document => {
             return{
                 id: document.id,
@@ -33,16 +31,16 @@ class FirebaseContainer{
     }
 
     async getById(id){
-        const docRef = await this.query.get(id);
-        if(!docRef){
+        const docRef = await this.query.doc(id);
+        const document = await docRef.get();
+        if(!document.exists){
             throw new Error(`id ${id} does not exist in our records`);
         }
-        const document = await docRef.get();
         return document.data();
     }
 
     async save(item){
-        const data = this.getAll();
+        const data = await this.getAll();
         if(!item.id){
             let maxId = 0;
             if(data.length > 0){
@@ -51,13 +49,20 @@ class FirebaseContainer{
             }
             item.id = maxId + 1;
         }
-        const docRef = this.query.doc(item.id);
-        return await docRef.set(item);
+        const docRef = this.query.doc(`${item.id}`);
+        return await docRef.set(JSON.parse(JSON.stringify(item)));
     }
 
     async deleteById(id){
-        const docRef = this.query.doc(id);
-        return await docRef.delete();
+        let data;
+        try{
+            const docRef = this.query.doc(id);
+            await docRef.delete();
+            data = await this.getAll();
+        }catch(error){
+            throw new Error(error);
+        }
+        return data;
     }
 
     async deleteAll(){

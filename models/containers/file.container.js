@@ -7,7 +7,7 @@ class FileContainer{
         this.path = `${this.folder}${this.file}`;
     }
 
-    static async connect(collection){
+    static async connect(){
         return;
     }
 
