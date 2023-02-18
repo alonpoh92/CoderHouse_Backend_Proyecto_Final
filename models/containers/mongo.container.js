@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const dbConfig = require('../../db/db.config');
+const dbConfig = require('../../db/config');
 
 class MongoContainer{
     constructor(collection, schema){
@@ -8,7 +8,7 @@ class MongoContainer{
     }
 
     static async connect(){
-        await mongoose.connect(dbConfig.mongodb.uri);
+        await mongoose.connect(dbConfig.mongodb.connectTo("CoderHouseBackend"));
     }
 
     static async disconnect(){
