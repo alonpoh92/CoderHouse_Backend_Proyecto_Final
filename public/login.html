@@ -18,7 +18,7 @@
                         <div class="row h-100 position-relative overflow-hidden w-100 m-0">
                             <div id="signUp" class="col-12 col-md-6 h-0 h-md-100 p-md-4 d-flex justify-content-center align-items-center overflow-hidden">
                                 <div class="w-100 overflow-hidden">
-                                    <form action="/api/auth/register" method="POST">
+                                    <form action="/api/auth/register" method="POST" id="signUpForm" enctype="multipart/form-data">
                                         <h2 class="text-center mb-3">Create Account</h2>
                                         <div class="row mb-2">
                                             <div class="col-6">
@@ -39,8 +39,8 @@
                                         <div class="mb-2">
                                             <label for="phone" class="form-label mb-1">Phone Number</label>
                                             <div class="input-group">
-                                                <div class="col-auto">
-                                                    <select class="form-select" aria-label="Default select example" d="basic-addon3">
+                                                <div class="col-6">
+                                                    <select class="form-select" aria-label="Default select example" id="basic-addon3" name="countrycode">
                                                         <option value="+93">Afganistán</option>
                                                         <option value="+355">Albania</option>
                                                         <option value="+213">Argelia</option>
@@ -286,7 +286,7 @@
                                         </div>
                                         <div class="mb-2">
                                             <label for="userAvatar" class="form-label">User Avatar</label>
-                                            <input class="form-control" type="file" id="userAvatar" accept="image/"">
+                                            <input class="form-control" type="file" id="userAvatar" name="userAvatar" accept="image/*">
                                         </div>
                                         <div class="row">
                                             <div class="col-6">
@@ -328,7 +328,7 @@
                             <div id="signIn" class="col-12 col-md-6 h-75 h-md-100 margin-top p-3 d-flex justify-content-center align-items-center overflow-hidden">
                                 <div class="w-100 overflow-hidden">
                                     <h2 class="text-center">Sign In</h2>
-                                    <form method="POST" action="/api/auth/login">    
+                                    <form method="POST" action="/api/auth/login" id="signInForm">    
                                         <div class="mb-2">
                                             <label for="emailSignIn" class="form-label mb-1">Email address</label>
                                             <input type="email" class="form-control" id="emailSignIn" onkeyup="validateSignIn()" name="username" placeholder="name@example.com">

@@ -42,6 +42,10 @@ class MongoContainer{
         return await newDocument.save();
     }
 
+    async update(id, newItem){
+        return await this.model.updateOne({id}, newItem)
+    }
+
     async deleteById(id){
         let data;
         try{

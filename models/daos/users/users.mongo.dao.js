@@ -1,13 +1,13 @@
 const MongoDBContainer = require('../../containers/mongo.container');
 const { HttpError } = require('../../../utils/api.utils');
-const UserSchema = require('../../schemas/user.schema');
+const userSchema = require('../../schemas/User.schema');
 const constants = require('../../../constants/api.constants');
 
 const collection = 'User';
 
 class UsersDao extends MongoDBContainer {
   constructor() {
-    super(collection, UserSchema);
+    super(collection, userSchema);
   }
 
   async createUser(userItem) {
@@ -24,6 +24,19 @@ class UsersDao extends MongoDBContainer {
 
   };
 
+  async updateUser(id, userItem){
+    try {
+      const user = await this.update(id, userItem);
+      return user;
+    }
+    catch(error) {
+      if (error.message.toLowerCase().includes('e11000') || error.message.toLowerCase().includes('duplicate')) {
+        throw new HttpError(constants.HTTP_STATUS.BAD_REQUEST, 'User with given email already exist');
+      }
+      throw new HttpError(constants.HTTP_STATUS.INTERNAL_ERROR, error.message, error);
+    }
+  };
+
   async getById(id) {
     try {
       const document = await this.model
@@ -38,13 +51,13 @@ class UsersDao extends MongoDBContainer {
     catch(error) {
       throw new HttpError(constants.HTTP_STATUS.INTERNAL_ERROR, error.message, error);
     }
-  }
+  };
 
   async getByEmail(email) {
     try {
       const document = await this.model.findOne({ email }, { __v: 0 });
       if (!document) {
-        const errorMessage = `Wrong username or password`;
+        const errorMessage = `Wrong username ${email} or password`;
         throw new Error(errorMessage);
       } else {
         return document;
@@ -53,7 +66,7 @@ class UsersDao extends MongoDBContainer {
     catch(error) {
       throw new HttpError(constants.HTTP_STATUS.INTERNAL_ERROR, error.message, error);
     }
-  }
+  };
 };
 
 module.exports = UsersDao;

@@ -3,6 +3,20 @@ const imgLogIn = document.getElementById('imgLogIn');
 const signUpBtn = document.getElementById('signUpBtn');
 const signInBtn = document.getElementById('signInBtn');
 
+document.getElementById("signInForm").onkeypress = function(e) {
+    var key = e.charCode || e.keyCode || 0;     
+    if (key == 13) {
+        e.preventDefault();
+    }
+} 
+
+document.getElementById("signUpForm").onkeypress = function(e) {
+    var key = e.charCode || e.keyCode || 0;     
+    if (key == 13) {
+        e.preventDefault();
+    }
+} 
+
 function showSignUp(){
     imgLogIn.classList.remove("signin");
     signUpElement.classList.remove("h-0");

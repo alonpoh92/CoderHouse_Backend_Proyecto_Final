@@ -12,6 +12,11 @@ const UserSchema = new Schema({
       "Invalid email",
     ],
   },
+  name: { type: String, required: true },
+  phone: { type: String, required: true },
+  address: { type: String, required: true },
+  age: { type: Number, required: true },
+  avatar: { type: String, required: true },
   password: { type: String, required: true },
   createdAt: { type: Date, required: true },
   updatedAt: { type: Date, required: true }

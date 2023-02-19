@@ -1,4 +1,5 @@
 const express = require('express');
+const multer = require('multer');
 const path = require('path');
 
 const authControllers = require('../../../controllers/auth.controller');
@@ -7,9 +8,9 @@ const passport = require('../../../middlewares/passport');
 const router = express.Router();
 
 router.post(
-    '/register',
+    '/register', multer().single('userAvatar'), 
     passport.authenticate('signup', {
-        failureRedirect: '/signup-error'
+        failureRedirect: '/',
     }), authControllers.register
 );
 
