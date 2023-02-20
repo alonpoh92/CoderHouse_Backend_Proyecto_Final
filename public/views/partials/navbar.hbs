@@ -1,0 +1,48 @@
+<nav class="navbar bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand">CoderStore</a>
+    <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+    <div>
+      <div class="flex align-self-center">
+        <div class="d-inline-block me-4">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <button type="button" class="btn position-relative p-0">
+                  <img src="../../assets/img/cart_icon.png" style="width:30px" alt="cart"> 
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger p-1">
+                    10 
+                    <span class="visually-hidden">
+                      cart items
+                    </span>
+                  </span>
+                </button>
+              </a>
+              <div class="dropdown-menu position-absolute end-0" style="left:unset">
+                <p class="mb-0 text-center">Alonso Aponte</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="d-inline-block">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="d-inline-block" style="width: 25px; height: 25px">
+                  <img src="../../uploads/avatars/default.png" class="rounded-circle h-100" alt="...">
+                </div>
+              </a>
+              <div class="dropdown-menu position-absolute end-0 text-center" style="left:unset">
+                <p class="mb-0 text-center">Alonso Aponte</p>
+                <a type="button" class="btn btn-primary mt-2" href="/api/auth/logout">Close Session</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

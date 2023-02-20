@@ -202,7 +202,7 @@ function validateSignUp(){
     const validName = validateLong('name', {min: 1}, 'validName');
     const validPhone = validateNumber('phone', {min: 1000000, max: 99999999999}, 'validPhone');
     const validAddress = validateLong('address', {min: 1}, 'validAddress');
-    const validAge = validateNumber('age', {min: 1}, 'validAge');
+    const validAge = validateNumber('age', {min: 1, max: 110}, 'validAge');
     const validImg = validateFile('userAvatar', {max: 2000000}, ['jpg', 'jpeg', 'png'], 'validUserAvatar');
     const validSamePass = validateSame(['password1SignUp', 'password2SignUp'], 'passwordSame')
 

@@ -1,6 +1,6 @@
-const register = (req, res, next) => res.redirect('/profile');
+const register = (req, res, next) => res.redirect('/');
 
-const login = (req, res, next) => res.redirect('/profile') ;
+const login = (req, res, next) => res.redirect('/') ;
 
 module.exports = {
   login,

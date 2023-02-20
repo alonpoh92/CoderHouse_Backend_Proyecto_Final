@@ -44,7 +44,7 @@ passport.use('signup', new LocalStrategy({passReqToCallback: true}, async(req, u
         return done(null, user);
    }catch(error){
         logger.error('Error signing user up...');
-        return done(error.message);
+        return done(null, null);
    } 
 }));
 
@@ -55,12 +55,12 @@ passport.use('signin', new LocalStrategy(async(username, password, done) => {
             logger.warn(`Invalid user ${username} or password`);
             return done(null, false);
         }
-        logger.info(`User ${username} signed in`)
+        logger.info(`User ${user.email} has logged in`)
         return done(null, user);
     }catch(error){
         logger.error('Error signing user in...');
-        //return done(error.message);
-        return done(null, null)
+        logger.error(error.message);
+        return done(null, null);
     } 
  }));
 

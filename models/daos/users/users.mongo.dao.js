@@ -40,7 +40,7 @@ class UsersDao extends MongoDBContainer {
   async getById(id) {
     try {
       const document = await this.model
-        .findById(id, { __v: 0 })
+        .findById(id, { __v: 0, password: 0 })
       if (!document) {
         const errorMessage = `Resource with id ${id} does not exist in our records`;
         throw new Error(errorMessage);
