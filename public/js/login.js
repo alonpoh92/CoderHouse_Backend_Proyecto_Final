@@ -95,6 +95,38 @@ function validateLong(id, long={}, idMsg){
     }
 }
 
+function validateNumber(id, value={}, idMsg){
+    let validMin = true;
+    let validMax = true;
+    let validNumber = true;
+    const element = document.getElementById(id);
+    const elementMsg = document.getElementById(idMsg);
+    const val = parseInt(element.value.trim());
+    validNumber = !isNaN(val);
+    if(value.min){
+        if(val < value.min){
+            validMin = false;
+        }
+    }
+    if(value.max){
+        if(val > value.max){
+            validMax = false;
+        }
+    }
+    const valid = validMin && validMax && validNumber;
+    if(valid){
+        if(idMsg){
+            elementMsg.classList.add('d-none');
+        }
+        return true;
+    }else{
+        if(idMsg){
+            elementMsg.classList.remove('d-none');
+        }
+        return false;
+    }
+}
+
 function validateSame(ids=[], idMsg){
     const elementMsg = document.getElementById(idMsg);
     let pass = '';
@@ -117,14 +149,64 @@ function validateSame(ids=[], idMsg){
     return true;
 }
 
+function validateFile(id, size={}, extensions=[], idMsg){
+    let validMin = true;
+    let validMax = true;
+    let validExtension = true;
+    let allowedExtensions = ""; 
+    const element = document.getElementById(id);
+    const elementMsg = document.getElementById(idMsg);
+    const file = element.files[0];
+    const elementType = file.type;
+    const elementSize = file.size;
+    if(extensions.length > 0){
+        allowedExtensions = '(';
+        for(let extension of extensions){
+            allowedExtensions += '\\'+`${extension}|`;
+        }
+        allowedExtensions = allowedExtensions.substring(0, allowedExtensions.length - 1);
+        allowedExtensions += `)$`;
+        const regExpression = new RegExp(allowedExtensions, 'i');
+        console.log(regExpression);
+        validExtension = regExpression.exec(elementType);
+        console.log(validExtension);
+    }
+    if(size.min){
+        if(elementSize < size.min){
+            validMin = false;
+        }
+    }
+    if(size.max){
+        if(elementSize > size.max){
+            validMax = false;
+        }
+    }
+    const valid = validMin && validMax && validExtension;
+    if(valid){
+        if(idMsg){
+            elementMsg.classList.add('d-none');
+        }
+        return true;
+    }else{
+        if(idMsg){
+            elementMsg.classList.remove('d-none');
+        }
+        return false;
+    }
+}
+
 function validateSignUp(){
     const validEmail = checkEmail('emailSignUp', 'validEmail');
     const validPassword = checkPassword('password1SignUp', 'passwordCharacter');
     const validPasswordLong = validateLong('password1SignUp', {min: 8, max: 20}, 'passwordLong');
-    //const validName = validateLong('name', {min: 1}, 'validName');
+    const validName = validateLong('name', {min: 1}, 'validName');
+    const validPhone = validateNumber('phone', {min: 1000000, max: 99999999999}, 'validPhone');
+    const validAddress = validateLong('address', {min: 1}, 'validAddress');
+    const validAge = validateNumber('age', {min: 1}, 'validAge');
+    const validImg = validateFile('userAvatar', {max: 2000000}, ['jpg', 'jpeg', 'png'], 'validUserAvatar');
     const validSamePass = validateSame(['password1SignUp', 'password2SignUp'], 'passwordSame')
 
-    if(validEmail && validPassword && validPasswordLong && validSamePass){
+    if(validEmail && validPassword && validPasswordLong && validSamePass && validName && validAddress){
         signUpBtn.classList.remove('disabled');
         document.getElementById('validPassword').classList.add('d-none');
     }else{
@@ -135,7 +217,6 @@ function validateSignUp(){
 
 function validateSignIn(){
     const validEmail = checkEmail('emailSignIn');
-    //const validName = validateLong('nameSignIn', {min: 1});
     const validPasswordLong = validateLong('passwordSignIn', {min: 1});
     if(validEmail && validPasswordLong){
         signInBtn.classList.remove('disabled');

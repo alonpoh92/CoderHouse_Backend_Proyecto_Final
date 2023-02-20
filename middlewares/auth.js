@@ -1,10 +1,12 @@
-const auth = async (req, res, next) => {
+const auth = (failRedirect='/') => {
+  return async (req, res, next) => {
     if (req.isAuthenticated()) {
       next();
     }
     else {
-      res.redirect('/');
+      res.redirect(failRedirect);
     }
   };
+}
   
 module.exports = auth;

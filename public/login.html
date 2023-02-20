@@ -265,7 +265,10 @@
                                                         <option value="+263">Zimbabue</option>
                                                     </select>
                                                 </div>
-                                                <input type="text" class="form-control" aria-label="Text input with dropdown button" name="phone">
+                                                <input type="text" class="form-control" aria-label="Text input with dropdown button" onkeyup="validateSignUp()" name="phone" id="phone">
+                                            </div>
+                                            <div id="validPhone" class="form-text m-0">
+                                                Must be a valid phone
                                             </div>
                                         </div>
                                         <div class="row mb-2">
@@ -279,14 +282,17 @@
                                             <div class="col-4">
                                                 <label for="age" class="form-label mb-1">Age</label>
                                                 <input type="number" step="1" class="form-control" id="age" onkeyup="validateSignUp()" name="age" placeholder="18">
-                                                <div id="validAddress" class="form-text m-0">
+                                                <div id="validAge" class="form-text m-0">
                                                     Must be a valid age
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="mb-2">
                                             <label for="userAvatar" class="form-label">User Avatar</label>
-                                            <input class="form-control" type="file" id="userAvatar" name="userAvatar" accept="image/*">
+                                            <input class="form-control" type="file" id="userAvatar" name="userAvatar" accept="image/*" onChange="validateSignUp()">
+                                            <div id="validUserAvatar" class="form-text m-0">
+                                                Must be an image (jpg, jpeg or png) and not more than 2Mb
+                                            </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-6">
