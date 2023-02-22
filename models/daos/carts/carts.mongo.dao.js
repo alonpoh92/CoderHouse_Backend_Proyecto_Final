@@ -1,10 +1,13 @@
-const { cartsCollection, cartsSchema } = require("../../../utils/carts.utils");
-const MongoContainer = require("../../containers/mongo.container");
+const MongoDBContainer = require('../../containers/mongo.container');
 
-class CartsMongoDao extends MongoContainer{
+const cartsSchema = require('../../schemas/carts.schema');
+
+const collection = 'carts';
+
+class CartsDao extends MongoDBContainer{
     constructor(){
-        super(cartsCollection, cartsSchema);
+        super(collection, cartsSchema);
     }
 }
 
-module.exports = CartsMongoDao;
+module.exports = CartsDao;

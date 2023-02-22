@@ -21,7 +21,7 @@ class MongoContainer{
     }
 
     async getById(id){
-        const document = await this.model.findOne({id}, {__v: 0, _id: 0});
+        const document = await this.model.findOne({_id: id}, {__v: 0, _id: 0});
         if(!document){
             throw new Error(`${this.collection} with id ${id} does not exist in our records`);
         }
@@ -29,27 +29,18 @@ class MongoContainer{
     }
 
     async save(item){
-        const data = await this.getAll();
-        if(!item.id){
-            let maxId = 0;
-            if(data.length > 0){
-                const ids = data.map(product => product.id);
-                maxId = Math.max(...ids);
-            }
-            item.id = maxId + 1;
-        }
         const newDocument = new this.model(item);
         return await newDocument.save();
     }
 
     async update(id, newItem){
-        return await this.model.updateOne({id}, newItem)
+        return await this.model.updateOne({_id: id}, newItem)
     }
 
     async deleteById(id){
         let data;
         try{
-            await this.model.deleteOne({id});
+            await this.model.deleteOne({_id: id});
             data = await this.getAll();
         }catch(error){
             throw new Error(error);

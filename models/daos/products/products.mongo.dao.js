@@ -1,10 +1,13 @@
-const { productsSchema, productsCollection } = require("../../../utils/products.utils");
-const MongoContainer = require("../../containers/mongo.container");
+const MongoDBContainer = require('../../containers/mongo.container');
 
-class ProductsMongoDao extends MongoContainer{
-    constructor(){
-        super(productsCollection, productsSchema);
+const productSchema = require('../../schemas/Product.schema');
+
+const collection = 'products';
+
+class ProductsDao extends MongoDBContainer {
+    constructor() {
+      super(collection, productSchema);
     }
 }
 
-module.exports = ProductsMongoDao;
+module.exports = ProductsDao;

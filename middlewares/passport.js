@@ -4,10 +4,9 @@ const bcrypt = require('bcrypt');
 const fs = require('fs');
 
 const logger = require('../utils/logger.utils');
-const UsersDao = require('../models/daos/users/users.mongo.dao');
-const { formatUserForDB } = require('../utils/users.utils');
+const userController = require('../controllers/users.controller');
 
-const User =  new UsersDao();
+const { formatUserForDB } = require('../utils/formats/users.utils');
 
 const salt = () => bcrypt.genSaltSync(10);
 const createHash = (password) => bcrypt.hashSync(password, salt());
@@ -23,22 +22,22 @@ passport.use('signup', new LocalStrategy({passReqToCallback: true}, async(req, u
         const userItem = {
             email: username,
             name: body.name,
-            phone: body.countrycode+body.phone,
+            phone: body.phone,
+            phoneCode: body.countrycode,
             address: body.address,
             age: body.age,
             avatar: "default.png",
             password: createHash(password)
         }
         const newUser = formatUserForDB(userItem);
-        const user = await User.createUser(newUser);
+        const user = await userController.createUser(newUser);
 
-        // Save User Avatar
         const imgName = user._id+"."+avatar.mimetype.substring(avatar.mimetype.search("/")+1);
         await fs.promises.writeFile(`./public/uploads/avatars/${imgName}`, avatar.buffer);
 
         // Update User Avatar
         newUser.avatar = imgName;
-        await User.updateUser(user._id, newUser);
+        await userController.updateUser(user._id, newUser);
 
         logger.info(`User ${user.email} registration successfull`);
         return done(null, user);
@@ -50,7 +49,7 @@ passport.use('signup', new LocalStrategy({passReqToCallback: true}, async(req, u
 
 passport.use('signin', new LocalStrategy(async(username, password, done) => {
     try{
-        const user = await User.getByEmail(username);
+        const user = await userController.getByEmail(username);
         if(!isValidPassword(user, password)){
             logger.warn(`Invalid user ${username} or password`);
             return done(null, false);
@@ -70,7 +69,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
     try{
-        const user = await User.getById(id);
+        const user = await userController.getById(id);
         done(null, user);
     }catch(error){
         done(error);

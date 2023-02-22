@@ -9,11 +9,21 @@ const router = express.Router();
 router.use('/api', apiRoutes);
 
 router.get('/', authMiddleware('/login'), async (req, res) => {
-  return res.render('test');
+  const data = req.user;
+  data.qtyItems = 2;
+  data.hasItems = data.qtyItems > 0;
+  return res.render('test', data);
 });
 
 router.get('/login', (req, res) => {
   return res.sendFile(path.resolve(__dirname, '../public/login.html'));
+});
+
+router.get('/profile', (req, res) => {
+  const data = req.user;
+  data.qtyItems = 0;
+  data.hasItems = data.qtyItems > 0;
+  return res.render('profile', data);
 });
 
 router.get('/signin-error', (req, res) => {
