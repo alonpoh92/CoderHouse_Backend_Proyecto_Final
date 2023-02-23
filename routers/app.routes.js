@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
 
+const productController = require('../controllers/products.controller');
+
 const authMiddleware = require('../middlewares/auth');
 const apiRoutes = require('./api/api.routes');
 
@@ -12,6 +14,16 @@ router.get('/', authMiddleware(true, '/login'), async (req, res) => {
   const data = req.user;
   data.qtyItems = 2;
   data.hasItems = data.qtyItems > 0;
+  const products = await productController.getAllProducts();
+  data.products = products.data;
+  data.products.map(product => {
+    if(!product.photo.includes("http")){
+      product.photoInternal = true;
+    }else{
+      product.photoInternal = false;
+    }
+  });
+  data.error = products.error;
   return res.render('store', data);
 });
 
