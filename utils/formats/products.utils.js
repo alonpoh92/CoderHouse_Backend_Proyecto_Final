@@ -1,5 +1,5 @@
 const formatProductForDB = (userObj) => {
-    const newUser = {
+    const newProduct = {
         name: userObj.name.trim().toLowerCase().replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
         description: userObj.description.trim().toLowerCase().replace(/(^\w{1})/g, letter => letter.toUpperCase()),
         code: userObj.code.trim().toLowerCase(),
@@ -9,7 +9,7 @@ const formatProductForDB = (userObj) => {
         createdAt: new Date(),
         updatedAt: new Date(),
     };
-    return newUser;
+    return newProduct;
   };
   
   module.exports = {

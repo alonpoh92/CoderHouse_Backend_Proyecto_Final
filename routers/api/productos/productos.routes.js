@@ -1,10 +1,8 @@
 const express = require('express');
 const {ProductsController} = require('../../../controllers/products.controller');
-const {Product} = require('../../../models/classes/Product');
+const products = require('../../../models/classes/Product');
 
 const router = express.Router();
-
-const products = new ProductsController();
 
 function noAdminRouteError(req){
     return {error: -1, description: `path '${req.originalUrl}' method '${req.method}' not authorized`}

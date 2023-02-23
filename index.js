@@ -6,7 +6,7 @@ const path = require('path');
 const cluster = require('cluster');
 const os = require('os');
 
-dataSource = require('./models/containers/mongo.container');
+const dataSource = require('./models/containers/mongo.container');
 const envConfig = require('./config');
 const dbConfig = require('./db/config');
 const passport = require('./middlewares/passport');

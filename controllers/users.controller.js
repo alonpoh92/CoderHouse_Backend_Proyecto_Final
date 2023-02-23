@@ -1,5 +1,4 @@
 const { UsersDao } = require('../models/daos/app.daos');
-
 const { HttpError } = require('../utils/api.utils');
 const constants = require('../constants/api.constants');
 

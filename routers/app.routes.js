@@ -12,7 +12,7 @@ router.get('/', authMiddleware(true, '/login'), async (req, res) => {
   const data = req.user;
   data.qtyItems = 2;
   data.hasItems = data.qtyItems > 0;
-  return res.render('test', data);
+  return res.render('store', data);
 });
 
 router.get('/login', authMiddleware(false, '/'), (req, res) => {
