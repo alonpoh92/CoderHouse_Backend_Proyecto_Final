@@ -1,8 +1,20 @@
 const { ProductsDao } = require('../models/daos/app.daos');
+const { HttpError } = require('../utils/api.utils');
+const constants = require('../constants/api.constants');
 
 const productsDao = new ProductsDao();
 
 class ProductsController{
+    async getProductById(id){
+        try {
+            const product = await productsDao.getAll({_id: id});
+            return product;
+        }
+        catch(error) {
+            throw new HttpError(constants.HTTP_STATUS.INTERNAL_ERROR, error.message, error);
+        } 
+    }
+    
     async getAllProducts(){
         const res = {};
         try{
@@ -54,6 +66,7 @@ class ProductsController{
         }
         return res;
     }
+    
 }
 
 module.exports = new ProductsController();

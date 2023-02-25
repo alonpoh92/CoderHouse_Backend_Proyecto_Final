@@ -22,6 +22,7 @@ router.get('/', authMiddleware(true, '/login'), async (req, res) => {
     }else{
       product.photoInternal = false;
     }
+    product.id = ''+product._id;
   });
   data.error = products.error;
   return res.render('store', data);

@@ -16,7 +16,7 @@ class MongoContainer{
     }
 
     async getAll(filter = {}){
-        const documents = await this.model.find(filter, {__v: 0, _id: 0}).lean();
+        const documents = await this.model.find(filter, {__v: 0}).lean();
         return documents;
     }
 

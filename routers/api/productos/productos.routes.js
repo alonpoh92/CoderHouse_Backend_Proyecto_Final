@@ -1,6 +1,5 @@
 const express = require('express');
 const {ProductsController} = require('../../../controllers/products.controller');
-const products = require('../../../models/classes/Product');
 
 const router = express.Router();
 
@@ -20,7 +19,7 @@ function isAdmin(admin){
     }
 }
 
-router.get('/', async (req, res) => {
+/*router.get('/', async (req, res) => {
     const data = await products.getAllProducts();
     if(!data.error){
         res.status(200).json(data);
@@ -117,6 +116,6 @@ router.delete('/:id', async (req, res) => {
     }else{
         res.status(200).json({data: null, error: noAdminRouteError(req)});
     }
-});
+});*/
 
 module.exports = router;

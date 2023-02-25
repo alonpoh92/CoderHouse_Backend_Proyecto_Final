@@ -1,6 +1,6 @@
 const MongoDBContainer = require('../../containers/mongo.container');
 
-const cartsSchema = require('../../schemas/carts.schema');
+const cartsSchema = require('../../schemas/Carts.schema');
 
 const collection = 'carts';
 

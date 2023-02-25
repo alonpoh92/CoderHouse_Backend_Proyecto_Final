@@ -1,12 +1,41 @@
 const express = require('express');
-const {CartsController} = require('../../../controllers/carts.controller');
-const productsList = require('../../../controllers/products.controller');
-const {Cart} = require('../../../models/classes/Cart');
+const cartsController = require('../../../controllers/carts.controller');
 
 const router = express.Router();
 
-const carts = new CartsController();
+router.post('/add/:id', async (req, res) => {
+    const { id } = req.params;
+    const userId = ''+req.user._id;
+    let products = [];
+    try{
+        let cart = await cartsController.getCartByUserId(userId);
+        if(cart.length == 0){
+            cart = await cartsController.createNewCart(userId);
+        }else{
+            cart = cart[0];
+        }
+        products = cart.products;
+        let exist = false;
+        products.map((product) => {
+            if(product.id == id){
+                product.qty = product.qty + 1;
+                exist = true;
+            }
+        })
+        if(!exist){
+            products.push({id, qty: 1});
+        }
+        cart.updatedAt = new Date();
+        await cartsController.updateCart(''+cart._id, cart)
+        res.status(200).json(cart); 
 
+    }catch(error){
+        console.log(error)
+        res.status(200).json({error});
+    }
+});
+
+/*
 router.post('/', async (req, res) => {
     const { products } = req.body;
     if(products){
@@ -112,5 +141,6 @@ router.delete('/:id/products/:id_prod', async (req, res) => {
         res.status(400).json(oldData);
     }
 });
+*/
 
 module.exports = router;

@@ -23,6 +23,7 @@
                             </div>
                             <div class="w-100">
                                 <h6 class="mb-3">${{this.price}}</h6>
+                                <button type="button" class="btn btn-outline-success" onClick="addProduct('{{this.id}}')">Add to Cart</button>
                             </div>
                         </div>
                     </div>
@@ -31,3 +32,4 @@
         </div>
     </div>
 {{/if}}
+<script src="../js/store.js"></script>
