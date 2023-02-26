@@ -27,11 +27,11 @@ router.post('/add/:id', async (req, res) => {
         }
         cart.updatedAt = new Date();
         await cartsController.updateCart(''+cart._id, cart)
-        res.status(200).json(cart); 
+        res.status(200).json({success: true, error: undefined}); 
 
     }catch(error){
         console.log(error)
-        res.status(200).json({error});
+        res.status(200).json({success: false, error});
     }
 });
 

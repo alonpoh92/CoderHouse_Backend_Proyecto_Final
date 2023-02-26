@@ -28,7 +28,7 @@ class ProductsController{
         return res;
     }
 
-    async getProductById(id){
+    /*async getProductById(id){
         const res = {};
         try{
             const data = await productsDao.getById(id);
@@ -39,7 +39,7 @@ class ProductsController{
             res['error'] = error.message;
         }
         return res;
-    }
+    }*/
 
     async addNewProduct(item){
         const res = {};
