@@ -1,5 +1,6 @@
 const express = require('express');
 const cartsController = require('../../../controllers/carts.controller');
+const ordersController = require('../../../controllers/orders.controller');
 
 const router = express.Router();
 
@@ -34,6 +35,8 @@ router.post('/add/:id', async (req, res) => {
         res.status(200).json({success: false, error});
     }
 });
+
+router.post('/placeOrder', ordersController.placeOrder);
 
 /*
 router.post('/', async (req, res) => {

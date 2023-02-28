@@ -38,12 +38,19 @@ class CartsController{
             return cart;
         }
         catch(error) {
-            if (error.message.toLowerCase().includes('e11000') || error.message.toLowerCase().includes('duplicate')) {
-                throw new HttpError(constants.HTTP_STATUS.BAD_REQUEST, 'User with given email already exist');
-            }
             throw new HttpError(constants.HTTP_STATUS.INTERNAL_ERROR, error.message, error);
         }
     };
+
+    async deleteCart(id){
+        try {
+            const cart = await cartsDao.deleteById(id);
+            return;
+        }
+        catch(error) {
+            throw new HttpError(constants.HTTP_STATUS.INTERNAL_ERROR, error.message, error);
+        }
+    }
 
     /*
     async addNewCart(item){

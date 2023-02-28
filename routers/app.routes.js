@@ -32,13 +32,18 @@ router.get('/', authMiddleware(true, '/login'), async (req, res) => {
 
 router.get('/cart', authMiddleware(true, '/login'), async (req, res) => {
   let data = req.user;
+  let cart = await cartController.getCartByUserId(''+data._id);
+  if(cart.length < 1){
+    cart = await cartController.createNewCart(''+data._id);
+  }else{
+    cart = cart[0];
+  }
   data.qtyItems = await navbarController.getQtyProducts(''+req.user._id);
   data.hasItems = data.qtyItems > 0;
-  const cart = await cartController.getCartByUserId(''+data._id);
   data.products = [];
   data.total = 0;
-  for(let product of cart[0].products){
-    productDetails = await productController.getProductById(product.id);
+  for(let product of cart.products){
+    const productDetails = await productController.getProductById(product.id);
     data.total += productDetails[0].price * product.qty
     data.products.push({...product, ...productDetails[0]});
   }

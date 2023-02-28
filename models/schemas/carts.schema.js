@@ -7,8 +7,7 @@ const CartSchema = new Schema({
         id: { type: String },
         qty: { type: Number }
     }],
-    createdAt: { type: Date, required: true },
-    updatedAt: { type: Date, required: true }
+    createdAt: { type: Date, required: true }
 });
 
 CartSchema.index({ tittle: 1 });

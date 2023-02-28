@@ -41,7 +41,7 @@ class MongoContainer{
         let data;
         try{
             await this.model.deleteOne({_id: id});
-            data = await this.getAll();
+            data = {success: true};
         }catch(error){
             throw new Error(error);
         }
