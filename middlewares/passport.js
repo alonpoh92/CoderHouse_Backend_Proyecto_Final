@@ -3,8 +3,10 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const fs = require('fs');
 
+const env = require('../config');
 const logger = require('../utils/logger.utils');
 const userController = require('../controllers/users.controller');
+const emailController = require('../controllers/email.controller');
 
 const { formatUserForDB } = require('../utils/formats/users.utils');
 
@@ -38,6 +40,20 @@ passport.use('signup', new LocalStrategy({passReqToCallback: true}, async(req, u
         // Update User Avatar
         newUser.avatar = imgName;
         await userController.updateUser(user._id, newUser);
+
+       
+
+        const email = await emailController.sendMail({
+            from: "Store Server",
+            to: env.ADMIN_EMAIL,
+            subject: "New Register",
+            html: `<h2 style="margin-bottom: 10px">New Register Info:</h2>
+            <p><span style="font-weight: bold; margin-right: 5px;">Email:</span>${newUser.email}</p>
+            <p><span style="font-weight: bold; margin-right: 5px;">Phone:</span>(${newUser.phoneCode})${newUser.phone}</p>
+            <p><span style="font-weight: bold; margin-right: 5px;">Address:</span>${newUser.address}</p>
+            <p><span style="font-weight: bold; margin-right: 5px;">Age:</span>${newUser.age}</p>
+            <p><span style="font-weight: bold; margin-right: 5px;">Avatar:</span>http://${req.get("host")}/uploads/avatars/${newUser.avatar}</p>`          
+        }, "gmail")
 
         logger.info(`User ${user.email} registration successfull`);
         return done(null, user);
