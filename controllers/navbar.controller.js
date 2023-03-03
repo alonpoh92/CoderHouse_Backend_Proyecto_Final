@@ -1,4 +1,5 @@
 const cartsController = require('./carts.controller');
+const usersController = require('./users.controller');
 
 class NavBarController{
     async getQtyProducts(userId){

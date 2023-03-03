@@ -5,12 +5,12 @@ function placeOrder(){
             console.log(data)
             if(data.success){
                 Swal.fire({
-                    title: 'Product Added!!!',
+                    title: 'Your Order Has Been Placed!!!',
                     icon: 'success',
                     timer: 4500,
                     confirmButtonText: 'Continue',
                     didClose: () => {
-                        window.location.href('./');
+                        window.location.assign('/');
                     }
                 })
             }else{

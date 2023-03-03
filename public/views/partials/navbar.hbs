@@ -2,8 +2,8 @@
   <div class="container-fluid">
     <a class="navbar-brand" href="/">CoderStore</a>
     <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search">
+        <button class="btn btn-outline-success" type="button" onclick="search()">Search</button>
     </form>
     <div>
       <div class="flex align-self-center">
@@ -29,7 +29,7 @@
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle m-0" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <div class="d-inline-block" style="width: 25px; height: 25px">
-                  <img src="../../uploads/avatars/default.png" class="rounded-circle h-100" alt="...">
+                  <img src="../../uploads/avatars/{{avatar}}" class="rounded-circle h-100" alt="...">
                 </div>
               </a>
               <div class="dropdown-menu position-absolute end-0 text-center" style="left:unset">
