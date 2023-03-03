@@ -167,9 +167,7 @@ function validateFile(id, size={}, extensions=[], idMsg){
         allowedExtensions = allowedExtensions.substring(0, allowedExtensions.length - 1);
         allowedExtensions += `)$`;
         const regExpression = new RegExp(allowedExtensions, 'i');
-        console.log(regExpression);
         validExtension = regExpression.exec(elementType);
-        console.log(validExtension);
     }
     if(size.min){
         if(elementSize < size.min){

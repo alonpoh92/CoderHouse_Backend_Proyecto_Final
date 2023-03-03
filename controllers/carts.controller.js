@@ -10,7 +10,6 @@ class CartsController{
     async createNewCart(userId){
         try {
             const cartItem = formatCartForDB({userId: userId});
-            console.log(cartItem)
             const cart = await cartsDao.save(cartItem);
             return cart;
         }

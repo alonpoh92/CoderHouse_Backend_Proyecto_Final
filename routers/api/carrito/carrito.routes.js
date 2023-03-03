@@ -31,7 +31,6 @@ router.post('/add/:id', async (req, res) => {
         res.status(200).json({success: true, error: undefined}); 
 
     }catch(error){
-        console.log(error)
         res.status(200).json({success: false, error});
     }
 });
