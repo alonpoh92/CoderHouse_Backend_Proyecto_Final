@@ -4,6 +4,7 @@ const { formatOrderForDB } = require('../utils/formats/orders.util');
 const cartController = require('./carts.controller');
 const productController = require('./products.controller');
 const smsController = require('./sms.controller');
+const whatsappController = require('./whatsapp.controller');
 const emailController = require('./email.controller');
 
 const ordersDao = new OrdersDao();
@@ -32,6 +33,11 @@ class OrdersController{
                 body: `Hi ${req.user.name}, your order has been placed with id: ${order._id}`,
                 from: env.TWILIO_PHONE,
                 to: `${req.user.phoneCode}${req.user.phone}`
+            });
+            await whatsappController.sendWhatsapp({
+                body: `New order from ${req.user.name} (${req.user.email})`,
+                from: `whatsapp:${env.TWILIO_SANDBOX}`,
+                to: `whatsapp:${req.user.phoneCode}${req.user.phone}`
             });
             let totalCart = 0;
             let html = `<h2 style="margin-bottom: 10px">New Order Info:</h2>
