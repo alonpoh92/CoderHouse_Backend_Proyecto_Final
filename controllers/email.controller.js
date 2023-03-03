@@ -1,9 +1,8 @@
 const { createTransport } = require('nodemailer');
+
 const { HttpError } = require('../utils/api.utils');
 const constants = require('../constants/api.constants');
 const env = require('../config');
-
-console.log(env)
 
 transporterEthereal = () => createTransport({
     host: 'smtp.ethereal.email',
@@ -62,7 +61,6 @@ class EmailController{
             }
             return info;
         }catch(error){
-            console.log(error.message)
             throw new HttpError(constants.HTTP_STATUS.INTERNAL_ERROR, error.message, error);
         }
     }

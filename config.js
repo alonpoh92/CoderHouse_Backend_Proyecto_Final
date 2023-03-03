@@ -10,5 +10,8 @@ module.exports = {
     SESSION_SECRET: process.env.SESSION_SECRET,
     ADMIN_EMAIL: process.env.ADMIN_EMAIL,    
     EMAIL_GMAIL: process.env.EMAIL_GMAIL,
-    PASS_GMAIL: process.env.PASS_GMAIL
+    PASS_GMAIL: process.env.PASS_GMAIL,    
+    TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID,
+    TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN, 
+    TWILIO_PHONE: process.env.TWILIO_PHONE
 }

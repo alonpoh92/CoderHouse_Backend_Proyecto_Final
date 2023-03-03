@@ -41,8 +41,6 @@ passport.use('signup', new LocalStrategy({passReqToCallback: true}, async(req, u
         newUser.avatar = imgName;
         await userController.updateUser(user._id, newUser);
 
-       
-
         const email = await emailController.sendMail({
             from: "Store Server",
             to: env.ADMIN_EMAIL,
