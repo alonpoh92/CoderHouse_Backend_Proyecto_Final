@@ -2,33 +2,42 @@
     <p>{{error}}</p>
 {{else}}
     <div class="text-center container">
-        <h4 class="mt-4 mb-0"><strong>CoderStore</strong></h4>
+        {{#if filter}}
+            <div>
+                <p class="mt-4 mb-0 text-end"><span class="fw-bolder">Filtered By: </span>{{filter}}<a type="button" class="btn btn-outline-danger p-1 ms-2" href="/">X</a></p>
+            </div>
+        {{/if}}
+        <div>
+            <h4 class="mt-4 mb-0"><strong>CoderStore</strong></h4>
+        </div>
         <div class="row p-4">
-            {{#each products}}
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="card h-100">
-                        <div class="ratio ratio-16x9">
-                            <a href="#!">
+            {{#if hasProducts}}
+                {{#each products}}
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="ratio ratio-16x9">
                                 <img src="{{#if this.photoInternal}}../../../uploads/products/{{/if}}{{this.photo}}" class="w-100 h-100" style="object-position: center center; object-fit: cover"/>
-                            </a>
-                        </div>
-                        <div class="card-body d-flex align-content-between flex-wrap">
-                            <div class="w-100">
-                                <a href="" class="text-reset text-decoration-none">
+                            </div>
+                            <div class="card-body d-flex align-content-between flex-wrap">
+                                <div class="w-100">
                                     <h5 class="card-title mb-3">{{this.name}}</h5>
-                                </a>
-                            </div>
-                            <div class="w-100">
-                                <p>{{this.description}}</p>
-                            </div>
-                            <div class="w-100">
-                                <h6 class="mb-3">${{this.price}}</h6>
-                                <button type="button" class="btn btn-outline-success" onClick="addProduct('{{this.id}}')">Add to Cart</button>
+                                </div>
+                                <div class="w-100">
+                                    <p>{{this.description}}</p>
+                                </div>
+                                <div class="w-100">
+                                    <h6 class="mb-3">${{this.price}}</h6>
+                                    <button type="button" class="btn btn-outline-success" onClick="addProduct('{{this.id}}')">Add to Cart</button>
+                                </div>
                             </div>
                         </div>
                     </div>
+                {{/each}}
+            {{else}}
+                <div>
+                    No products
                 </div>
-            {{/each}}
+            {{/if}}
         </div>
     </div>
 {{/if}}

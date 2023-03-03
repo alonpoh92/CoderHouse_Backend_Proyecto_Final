@@ -28,6 +28,19 @@ class ProductsController{
         return res;
     }
 
+    async getFilterProducts(filter){
+        const res = {};
+        try{
+            const data = await productsDao.getAll(filter);
+            res['data'] = data;
+            res['error'] = null;
+        }catch(error){
+            res['data'] = null;
+            res['error'] = error.message;
+        }
+        return res;
+    }
+
     /*async getProductById(id){
         const res = {};
         try{

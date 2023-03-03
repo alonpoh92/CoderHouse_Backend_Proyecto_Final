@@ -13,11 +13,19 @@ const router = express.Router();
 router.use('/api', apiRoutes);
 
 router.get('/', authMiddleware(true, '/login'), async (req, res) => {
+  const search = req.query.search;
   const data = req.user;
+  let products;
   data.qtyItems = await navbarController.getQtyProducts(''+req.user._id);
   data.hasItems = data.qtyItems > 0;
-  const products = await productController.getAllProducts();
+  if(search == undefined || search.trim() == ""){
+    products = await productController.getAllProducts();
+  }else{
+    data.filter = search;
+    products = await productController.getFilterProducts({$or: [{name: {$regex: new RegExp(search.trim().replace(" ", "|"), "i")}}, {description: {$regex: new RegExp(search.trim().replace(" ", "|"), "i")}}]});
+  }
   data.products = products.data;
+  data.hasProducts = data.products.length > 0;
   data.products.map(product => {
     if(!product.photo.includes("http")){
       product.photoInternal = true;
