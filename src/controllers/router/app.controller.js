@@ -83,6 +83,26 @@ class RouterController{
         res.render('product', {hasItems, qtyItems, product, categories, error});
     };
 
+    cart = async (req, res) => {
+        const user = req.user;
+        const cart = await Cart.getCartByEmail(user.email);
+        const cartId = cart.id;
+        let products = [];
+        let qtyItems = 0;
+        let hasItems = false;
+        let error = undefined;
+        let total = 0;
+        const categories = [];
+        for(let item of cart.items){
+            const product = await Product.getProductById(item.id);
+            total += product.price*item.qty;
+            qtyItems += Number(item.qty);
+            products.push({...product, qty: item.qty, cartId});
+        };
+        hasItems = qtyItems > 0;
+        res.render('cart', {hasItems, qtyItems, products, categories, total, error});
+    };
+
     info = (req, res) => {
         const data = {};
         data.args = [];
