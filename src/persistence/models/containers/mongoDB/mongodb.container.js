@@ -27,7 +27,7 @@ class MongoContainer {
     }
 
     async getById(id) {
-        const document = await this.model.findOne({ _id: id }, { __v: 0 });
+        const document = await this.model.findOne({ _id: id }, { __v: 0 }).lean();
         if (!document) {
             const message = `Resource with id ${id} does not exist in our records`;
             throw new Error(message);

@@ -102,6 +102,7 @@ class RouterController{
                 categories.push(product.category);
             }
         });
+        products = [];
         for(let item of cart.items){
             const product = await Product.getProductById(item.id);
             total += product.price*item.qty;
@@ -109,6 +110,7 @@ class RouterController{
             products.push({...product, qty: item.qty, cartId});
         };
         hasItems = qtyItems > 0;
+        console.log(products)
         res.render('cart', {hasItems, qtyItems, products, categories, total, error});
     };
 
@@ -174,7 +176,6 @@ class RouterController{
             for(let item of orders.items){
                 total += Number(item.price)*Number(item.qty);
             }
-            console.log(orders)
             hasItems = qtyItems > 0;
         }catch(err){
             error = err;
