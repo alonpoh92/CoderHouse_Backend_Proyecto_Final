@@ -1,0 +1,38 @@
+<script src="/socket.io/socket.io.js"></script>
+<div class="container-fluid">
+    <div class="row vh-100">
+        <div class="col-12 bg-secondary p-4" style="min-height: 100vh;">
+            <div class="row h-100">
+                <div class="col-8 mx-auto my-auto">
+                    <div id="chat" class="mt-4">
+                        <div class="row">
+                            <div class="col-12 p-3 border border-light border-3 rounded">
+                                <h2 class="mb-3 fw-bold text-center">CHAT CENTER</h2>
+                                <form id="chat-form">
+                                    <div class="mb-2">
+                                        <label for="email" class="form-label mb-0 text-white">Email</label>
+                                        <input type="email" class="form-control" value="{{user.email}}" id="email" aria-describedby="emailHelp" disabled>
+                                    </div>
+                                    <div id="chat-messages" class="mb-2 p-2 border border-light border-3 rounded overflow-auto bg-light" style="height: 150px;">
+                                        {{> chat data=data error=error}}
+                                    </div>
+                                    <div class="mb-2">
+                                        <div class="form-row">
+                                            <div class="col-9 d-inline-block">
+                                                <input type="text" class="form-control d-inline-block" id="message" placeholder="Write a message!!!" aria-describedby="messageHelp">
+                                            </div>
+                                            <div class="col-2 d-inline-block">
+                                                <button type="submit" id="send" class="btn btn-primary d-inline-block w-100">Send<i class="ms-2 fa-regular fa-paper-plane"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/socket.js"></script>

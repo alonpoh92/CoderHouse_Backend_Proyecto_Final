@@ -1,0 +1,43 @@
+<section class="h-100" style="background-color: #eee;">
+    <div class="container-fluid h-100 py-5">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-10">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="fw-normal mb-0 text-black">Orders Review</h3>
+                </div>
+                {{#if hasOrders}}
+                    {{#each orders}}
+                        <div class="card rounded-3 mb-1">
+                        <div class="card-body p-4">
+                            <div class="row d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="text-center mb-0"><span class="lead fw-bolder">Order Id: </span>{{this.id}}</p>
+                                    <p class="text-center mb-0"><span class="lead fw-bolder">Items: </span>{{this.qtyItems}}</p>
+                                    <p class="text-center mb-0"><span class="lead fw-bolder">Created At: </span>{{this.createdAt}}</p>
+                                    <p class="text-center mb-0"><span class="lead fw-bolder">Order Total: $</span>{{this.total}}</p>
+                                    <a type="button" class="btn btn-outline-warning w-100 mt-2" href="/order/{{this.id}}">VIEW DETAILS</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+                {{else}}
+                    <div class="card rounded-3 mb-1">
+                        <div class="card-body p-4">
+                            <div class="row d-flex justify-content-between align-items-center">
+                                <div>
+                                    <p class="lead fw-bolder mb-2 text-center">YOU DON'T HAVE ORDERS YET</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mb-4">
+                        <div class="card-body p-4 d-flex flex-row">
+                            <a type="button" class="btn btn-outline-warning w-100" href="/">GO BACK TO STORE</a>
+                        </div>
+                    </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</section>

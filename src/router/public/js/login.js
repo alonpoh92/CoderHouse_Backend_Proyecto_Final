@@ -182,7 +182,6 @@ function signIn(){
         username: document.getElementById('emailSignIn').value.trim().toLowerCase(),
         password: document.getElementById('passwordSignIn').value.trim()
     }
-    console.log(data)
     fetch('/api/auth/login', {
         method: 'POST',
         headers: {

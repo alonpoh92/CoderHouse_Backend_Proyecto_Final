@@ -65,3 +65,52 @@ function calcTotal(){
         }
     });
 }
+
+function validateAddress(){
+    event.preventDefault();
+    const address = document.getElementById('address').value.trim().toLowerCase();
+    const placeButton = document.getElementById('placeOrder');
+    if(address.length > 0){
+        placeButton.classList.remove('disabled');
+    }else{
+        placeButton.classList.add('disabled');
+    }
+}
+
+function placeOrder(){
+    const address = document.getElementById('address').value.trim().toLowerCase();
+    const cartId = document.getElementsByClassName("qty")[0].getAttribute("cartId");
+    const data = {address};
+    fetch('/api/order/'+cartId, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    }).then(function(res) {
+        return res.json();
+    }).then(function(myJson){
+        if(myJson.success){
+            Swal.fire({
+                icon: 'success',
+                text: 'Your order has been placed',
+                timer: 4500,
+                confirmButtonText: 'Continue',
+                didClose: () => {
+                    window.location.href = "/";
+                }
+            })
+        }else{
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: myJson.message,
+                timer: 4500,
+                confirmButtonText: 'Continue',
+                didClose: () => {
+                    location.reload();
+                }
+            })
+        }
+    });
+}

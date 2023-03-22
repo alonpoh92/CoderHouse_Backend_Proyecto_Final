@@ -3,10 +3,12 @@ const os = require('os');
 
 const CartFactory = require('../../persistence/models/factories/carts.factory');
 const ProductFactory = require('../../persistence/models/factories/products.factory');
+const OrderFactory = require('../../persistence/models/factories/orders.factory');
 const args = require('../../../utils/minimist.utils');
 
 const Cart = new CartFactory();
 const Product = new ProductFactory();
+const Order = new OrderFactory();
 
 class RouterController{
     home = (req, res) => {
@@ -93,6 +95,13 @@ class RouterController{
         let error = undefined;
         let total = 0;
         const categories = [];
+        products = await Product.getProducts();
+        products.map((product) => {
+            product.cartId = cartId;
+            if(!categories.includes(product.category)){
+                categories.push(product.category);
+            }
+        });
         for(let item of cart.items){
             const product = await Product.getProductById(item.id);
             total += product.price*item.qty;
@@ -101,6 +110,103 @@ class RouterController{
         };
         hasItems = qtyItems > 0;
         res.render('cart', {hasItems, qtyItems, products, categories, total, error});
+    };
+
+    orders = async (req, res) => {
+        const user = req.user;
+        const cart = await Cart.getCartByEmail(user.email);
+        const cartId = cart.id;
+        const { category } = req.params;
+        let products = [];
+        let orders = [];
+        let qtyItems = 0;
+        let hasItems = false;
+        let hasOrders = false;
+        let error = undefined;
+        const categories = [];
+        cart.items.map((item) => {qtyItems += Number(item.qty)});
+        hasItems = qtyItems > 0;
+        try{
+            products = await Product.getProducts();
+            products.map((product) => {
+                product.cartId = cartId;
+                if(!categories.includes(product.category)){
+                    categories.push(product.category);
+                }
+            });
+            orders = await Order.getOrdersByEmail(user.email);
+            for(let order of orders){
+                order.qtyItems = 0;
+                order.total = 0;
+                for(let item of order.items){
+                    order.qtyItems += Number(item.qty);
+                    order.total += Number(item.price)*Number(item.qty);
+                }
+            }
+            hasOrders = orders.length > 0;
+        }catch(err){
+            error = err;
+        }
+        res.render('orders', {hasItems, qtyItems, hasOrders, orders, categories, error});
+    };
+
+    order = async (req, res) => {
+        const user = req.user;
+        const {id} = req.params;
+        const cart = await Cart.getCartByEmail(user.email);
+        const cartId = cart.id;
+        let products = [];
+        let orders = [];
+        let qtyItems = 0;
+        let hasItems = false;
+        let error = undefined;
+        let total = 0;
+        const categories = [];
+        try{
+            products = await Product.getProducts();
+            products.map((product) => {
+                product.cartId = cartId;
+                if(!categories.includes(product.category)){
+                    categories.push(product.category);
+                }
+            });
+            orders = await Order.getOrderById(id);
+            for(let item of orders.items){
+                total += Number(item.price)*Number(item.qty);
+            }
+            console.log(orders)
+            hasItems = qtyItems > 0;
+        }catch(err){
+            error = err;
+        }
+        res.render('order', {hasItems, qtyItems, orders, categories, total, error});
+    };
+
+    chat = async (req, res) => {
+        const user = req.user;
+        const {id} = req.params;
+        const cart = await Cart.getCartByEmail(user.email);
+        const cartId = cart.id;
+        let products = [];
+        let orders = [];
+        let qtyItems = 0;
+        let hasItems = false;
+        let error = undefined;
+        let total = 0;
+        const categories = [];
+        try{
+            products = await Product.getProducts();
+            products.map((product) => {
+                product.cartId = cartId;
+                if(!categories.includes(product.category)){
+                    categories.push(product.category);
+                }
+            });
+            hasItems = qtyItems > 0;
+        }catch(err){
+            error = err;
+        }
+        res.render('chat', {hasItems, qtyItems, categories, user})
     };
 
     info = (req, res) => {
