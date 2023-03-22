@@ -12,7 +12,7 @@ class RouterController{
     home = (req, res) => {
         const user = req.user;
         if (user) {
-            return res.redirect('/profile');
+            return res.redirect('/products');
         }
         else {
             return res.sendFile(path.resolve(__dirname, '../../router/public/login.html'));
@@ -30,6 +30,8 @@ class RouterController{
         let hasProducts = false;
         let error = undefined;
         const categories = [];
+        cart.items.map((item) => {qtyItems += Number(item.qty)});
+        hasItems = qtyItems > 0;
         try{
             products = await Product.getProducts();
             products.map((product) => {
@@ -44,13 +46,41 @@ class RouterController{
                     product.cartId = cartId;
                 });
             }
-            cart.items.map((item) => {qtyItems += Number(item.qty)});
-            hasItems = qtyItems > 0;
             hasProducts = products.length > 0;
         }catch(err){
             error = err;
         }
-        res.render('products', {hasItems, qtyItems, products, categories, hasProducts, cartId, error});
+        res.render('products', {hasItems, qtyItems, products, categories, hasProducts, error});
+    };
+
+    product = async (req, res) => {
+        const user = req.user;
+        const cart = await Cart.getCartByEmail(user.email);
+        const cartId = cart.id;
+        const { id } = req.params;
+        let products = [];
+        let product = {};
+        let qtyItems = 0;
+        let hasItems = false;
+        let error = undefined;
+        const categories = [];
+        cart.items.map((item) => {qtyItems += Number(item.qty)});
+        hasItems = qtyItems > 0;
+        try{
+            products = await Product.getProducts();
+            products.map((product) => {
+                product.cartId = cartId;
+                if(!categories.includes(product.category)){
+                    categories.push(product.category);
+                }
+            });
+            product = await Product.getProductById(id);
+            product.cartId = cartId;
+            console.log(product)
+        }catch(err){
+            error = err;
+        }
+        res.render('product', {hasItems, qtyItems, product, categories, error});
     };
 
     info = (req, res) => {
@@ -72,14 +102,6 @@ class RouterController{
         data.cpus = os.cpus().length;
         res.render('info', {layout: false, data})
     };
-
-    signin_error = (req, res) => {
-        res.render('signin-error', {layout: false});
-    }
-
-    signup_error = (req, res) => {
-        res.render('signup-error', {layout: false});
-    }
 }
 
 module.exports = new RouterController();

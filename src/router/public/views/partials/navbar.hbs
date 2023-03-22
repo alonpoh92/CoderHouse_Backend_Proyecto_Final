@@ -39,7 +39,7 @@
                 <p class="mb-0 text-center">{{name}}</p>
                 <hr class="my-2">
                 <a type="button" class="btn btn-outline-primary mt-2" href="/profile">View Profile</a>
-                <a type="button" class="btn btn-outline-danger mt-2" href="/api/auth/logout">Close Session</a>
+                <button type="submit" class="btn btn-outline-danger mt-2" onclick="closeSession()">Close Session</button>
               </div>
             </li>
           </ul>
@@ -48,3 +48,17 @@
     </div>
   </div>
 </nav>
+<script>
+  function closeSession(){
+    fetch('/api/auth/logout', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      }
+    }).then(function(res) {
+      return res.json();
+    }).then(function(myJson){
+      window.location.href = "/";
+    });
+  }
+</script>
