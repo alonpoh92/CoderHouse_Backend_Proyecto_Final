@@ -30,5 +30,7 @@ module.exports = {
     COOKIE_NAME: process.env.COOKIE_NAME,
     SESSION_TIME_EXP: process.env.SESSION_TIME_EXP,
     TOKEN_SECRET: process.env.TOKEN_SECRET,
-    TOKEN_PARAMETER_NAME: process.env.TOKEN_PARAMETER_NAME
+    TOKEN_PARAMETER_NAME: process.env.TOKEN_PARAMETER_NAME,
+    EMAIL_GMAIL: process.env.EMAIL_GMAIL,
+    PASS_GMAIL: process.env.PASS_GMAIL
 }

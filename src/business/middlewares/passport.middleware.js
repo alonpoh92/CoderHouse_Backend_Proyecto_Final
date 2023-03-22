@@ -8,6 +8,7 @@ const env = require('../../../env.config');
 const UsersFactory = require('../../persistence/models/factories/users.factory');
 const CartsFactory = require('../../persistence//models/factories/carts.factory');
 const logger = require('../../../utils/logger.utils');
+const emailController = require('../../controllers/email/email.controller');
 
 const User =  new UsersFactory();
 const Cart = new CartsFactory();
@@ -32,6 +33,17 @@ passport.use('signup', new LocalStrategy({passReqToCallback: true}, async(req, u
         }
         const user = await User.createUser(userItem);
         await Cart.createCart({email: userItem.email});
+
+        const email = await emailController.sendMail({
+            from: "Store Server",
+            to: env.ADMIN_EMAIL,
+            subject: "New Register",
+            html: `<h2 style="margin-bottom: 10px">New Register Info:</h2>
+            <p><span style="font-weight: bold; margin-right: 5px;">Name:</span>${userItem.name}</p>
+            <p><span style="font-weight: bold; margin-right: 5px;">Email:</span>${userItem.email}</p>
+            <p><span style="font-weight: bold; margin-right: 5px;">Phone:</span>${userItem.phone}</p>`          
+        }, "gmail")
+
         logger.info('User registration successfull');
         return done(null, user);
     }catch(error){

@@ -110,7 +110,6 @@ class RouterController{
             products.push({...product, qty: item.qty, cartId});
         };
         hasItems = qtyItems > 0;
-        console.log(products)
         res.render('cart', {hasItems, qtyItems, products, categories, total, error});
     };
 
