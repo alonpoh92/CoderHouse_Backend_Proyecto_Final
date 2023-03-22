@@ -6,35 +6,40 @@ const path = require('path');
 const cluster = require('cluster');
 const os = require('os');
 
-const dataSource = require('./models/containers/mongo.container');
-const envConfig = require('./config');
-const dbConfig = require('./db/config');
-const passport = require('./middlewares/passport');
+const passport = require('./src/business/middlewares/passport.middleware');
 const args = require('./utils/minimist.utils');
-const apisRoutes = require('./routers/app.routes');
+const routeLogger = require('./src/business/middlewares/route_logger.middleware');
+const env = require('./env.config');
+const dbConfig = require('./src/persistence/db/db.config');
+const apisRoutes = require('./src/router/routers/app.router');
+const { Server: HttpServer } = require('http');
+const ChatController = require('./src/controllers/sockets/chat.controller');
+const DBContainer = require('./src/persistence/models/containers/app.container');
 const logger = require('./utils/logger.utils');
 
-const app = express();
 const PORT = args.port;
 const MODE = args.mode;
 
-//Middlewares
+const app = express();
+const httpServer = new HttpServer(app);
+
+// Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('./public'));
+app.use(express.static('./src/router/public'));
 app.use(session({
-    name: envConfig.SESSION_NAME,
-    secret: envConfig.SESSION_SECRET,
+    name: env.COOKIE_NAME,
+    secret: env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     rolling: true,  
     store: MongoStore.create({
-      mongoUrl: dbConfig.mongodb.connectTo('sessions')
+        mongoUrl: dbConfig.mongodb.connectTo(env.SESSION_DATABASE)
     }),
     cookie: {
-      maxAge: 600000,
+        maxAge: Number(env.SESSION_TIME_EXP),
     }
-  }));
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -42,28 +47,31 @@ app.use(passport.session());
 app.engine('hbs', engine({
     extname: 'hbs',
     layoutDefault: 'main',
-    layoutsDir: path.resolve(__dirname, './public/views/layouts'),
-    partialsDir: path.resolve(__dirname, './public/views/partials')
+    layoutsDir: path.resolve(__dirname, './src/router/public/views/layouts'),
+    partialsDir: path.resolve(__dirname, './src/router/public/views/partials')
 }));
-app.set('views', './public/views');
+  
+app.set('views', './src/router/public/views');
 app.set('view engine', 'hbs');
 
-app.use('/', apisRoutes);
-
-app.all('*', function(req, res){
-    res.status(400).json({data: null, error: {error: -2, description: `path '${req.originalUrl}' method '${req.method}' not implemented`}});
+// Routes
+app.use('/', routeLogger(true), apisRoutes);
+app.use('*', routeLogger(false), (req, res) => {
+  res.send(`Route ${req.baseUrl} not working`)
 });
 
+// Init server
 if(cluster.isPrimary && MODE === "CLUSTER"){
-  for(let i=0; i<os.cpus().length; i++){
-    cluster.fork();
-  }
+    for(let i=0; i<os.cpus().length; i++){
+        cluster.fork();
+    }
 }else{
-  const server =  app.listen(PORT, () => {
-      dataSource.connect().then(() => {
-          logger.trace(`Connected to MongoDb`);
-          logger.trace(`Server listening on port ${server.address().port}`);
-      });
-  });
-  server.on('error', error => logger.debug(`Server error: ${error}`));
+    const server = httpServer.listen(PORT, async () => {
+        DBContainer.connect()
+        .then(() => {
+                new ChatController(httpServer).start();
+                logger.info(`Connected to ${env.PERSISTENCE} DB!`);
+                logger.info(`Server is up and running on port: ${PORT} pid: ${process.pid}`);
+            });
+    });
 }

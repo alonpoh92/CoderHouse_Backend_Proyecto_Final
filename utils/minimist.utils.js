@@ -1,5 +1,5 @@
 const minimist = require('minimist');
-const env = require('../config');
+const env = require('../env.config');
 
 module.exports = minimist(process.argv.slice(2), {
     alias: {
@@ -7,7 +7,7 @@ module.exports = minimist(process.argv.slice(2), {
         m: 'mode'
     },
     default: {
-        port: env.SERVER_PORT,
+        port: env.PORT,
         mode: env.SERVER_MODE
     }
 });

@@ -1,4 +1,4 @@
-const logger = require('../utils/logger.utils');
+const logger = require('./logger.utils');
 
 const successResponse = (data) => {
   return {
